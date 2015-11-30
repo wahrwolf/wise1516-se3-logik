@@ -12,9 +12,9 @@
 % zins(+Anlagebetrag, +Zinsfaktor, +Anlagedauer, ?Endguthaben)
 zins(Anlagebetrag,_,0,Anlagebetrag).
 zins(Anlagebetrag,Zinsfaktor,Anlagedauer,Endguthaben) :-
-	Anlage2 is ((Zinsfaktor + 1) * Anlagebetrag),
-	Dauer2 is Anlagedauer - 1,
-	zins(Anlage2,Zinsfaktor,Dauer2,Endguthaben).
+        Anlage2 is ((Zinsfaktor + 1) * Anlagebetrag),
+        Dauer2 is Anlagedauer - 1,
+        zins(Anlage2,Zinsfaktor,Dauer2,Endguthaben).
 % Testeingaben:
 % zins(1000,0.05,2,X).
 % X = 1102.5.
@@ -28,8 +28,8 @@ zins(Anlagebetrag,Zinsfaktor,Anlagedauer,Endguthaben) :-
 %(+Anlagebetrag, +Zinsfaktor, +Anlagedauer, ?Endguthaben)
 zins_ohne_zinseszins(Anlagebetrag,_,0,Anlagebetrag).
 zins_ohne_zinseszins(Anlagebetrag,Zinsfaktor,Anlagedauer,Endguthaben) :-
-	Endguthaben is (Zinsfaktor * Anlagebetrag * Anlagedauer)
-	+ Anlagebetrag.
+        Endguthaben is (Zinsfaktor * Anlagebetrag * Anlagedauer)
+        + Anlagebetrag.
 % Testeingaben:
 % zins_ohne_zinseszins(1000,0.05,3,X).
 % X = 1150.0.
@@ -58,11 +58,11 @@ zins_ohne_zinseszins(Anlagebetrag,Zinsfaktor,Anlagedauer,Endguthaben) :-
 % Startzins: 0.01
 neuzins(Anlagebetrag,_,_,0,Anlagebetrag).
 neuzins(Anlagebetrag,Bonuszins,Zins,Anlagedauer,Endguthaben) :-
-	AktBonus is (Bonuszins / 2),
-	Zins2 is Zins + AktBonus,
-	Anlage2 is (1 + Zins2) * Anlagebetrag,
-	Dauer2 is Anlagedauer - 1,
-	neuzins(Anlage2,AktBonus,Zins2,Dauer2,Endguthaben).
+        AktBonus is (Bonuszins / 2),
+        Zins2 is Zins + AktBonus,
+        Anlage2 is (1 + Zins2) * Anlagebetrag,
+        Dauer2 is Anlagedauer - 1,
+        neuzins(Anlage2,AktBonus,Zins2,Dauer2,Endguthaben).
 % Testeingaben:
 % neuzins(1000,0.04,0.01,4,X).
 % X = 1172.5756900000001.
@@ -88,15 +88,15 @@ neuzins(Anlagebetrag,Bonuszins,Zins,Anlagedauer,Endguthaben) :-
 % Dient lediglich der normalen Ausgabe von pi und nicht,
 % wie in der Formel angegeben (pi viertel).
 piaufg1(Schritte,Ergebnis) :- pi1(Schritte,Resultat),
-	Ergebnis is Resultat * 4.
+        Ergebnis is Resultat * 4.
 
-% pi1(+Schritte,-Ergebnis)
-pi1(1,0).
-pi1(Schritte,Resultat) :-
-	NeuSchritte is Schritte - 1,
-	Schritt is ((-1)^(NeuSchritte + 1)) / (2 * NeuSchritte - 1),
-	pi1(NeuSchritte,Resultat2),
-	Resultat is Schritt + Resultat2.
+% pi1_1(+Schritte,-Ergebnis)
+pi1_1(1,0).
+pi1_1(Schritte,Resultat) :-
+        NeuSchritte is Schritte - 1,
+        Schritt is ((-1)^(NeuSchritte + 1)) / (2 * NeuSchritte - 1),
+        pi1_1(NeuSchritte,Resultat2),
+        Resultat is Schritt + Resultat2.
 % Testeingaben: piaufg1
 % piaufg1(10, Ergebnis).
 % Ergebnis = 3.2523659347188767.
@@ -104,9 +104,23 @@ pi1(Schritte,Resultat) :-
 % piaufg1(1000, Ergebnis).
 % Ergebnis = 3.142593654340044.
 
+pi_1_2(N, ResultA):-pi_aufstieg(0,N,Result),
+					ResultA is Result + 4.
+
+pi_aufstieg(N, Nmax, Buff):-
+			N<Nmax,
+			N1 is N+1,
+			Schritt is Buff + ((-1)**(N + 1)) / (2 * N - 1),
+			pi_aufstieg(N1, Nmax, Schritt).
+
+
 % Aufgabe 2.1.2
 %
-% FEHLT
+% Im Falle des rekursiven Abstiegs liegt keine Endrekursion vor, da die erste Instanz
+% auf die Rückgabe von letzten Wert wartet.
+% Im Falle des rekursiven Aufstieg initieren wir unser Ergebnis mit 4
+% und addieren in jedem Schritt das neue Ergebnis drauf.
+% Deswegen haben wir aber zu jedem Schritt bereits die komplette Berechnung bis dort.
 
 % Aufgabe 2.2
 %
@@ -118,17 +132,17 @@ pi1(Schritte,Resultat) :-
 % Dient lediglich der normalen Ausgabe von pi und nicht,
 % wie in der Formel angegeben ( pi halbe )
 piaufg3(Schritte, Ergebnis) :- pi3(Schritte, Resultat),
-	Ergebnis is Resultat * 2.
+        Ergebnis is Resultat * 2.
 
 % pi3(+Schritte, -Resultat)
 pi3(1,1).
 pi3(Schritte,Resultat) :-
-	Schritte > 0,
-	NeuSchritte is Schritte - 1,
-	Schritt is ((2 * NeuSchritte) / (2 * NeuSchritte - 1)) *
-		   ((2 * NeuSchritte) / (2 * NeuSchritte + 1)),
-	pi3(NeuSchritte, Resultat2),
-	Resultat is Schritt * Resultat2.
+        Schritte > 0,
+        NeuSchritte is Schritte - 1,
+        Schritt is ((2 * NeuSchritte) / (2 * NeuSchritte - 1)) *
+                   ((2 * NeuSchritte) / (2 * NeuSchritte + 1)),
+        pi3(NeuSchritte, Resultat2),
+        Resultat is Schritt * Resultat2.
 % Testeingaben: piaufg3
 %
 % piaufg3(10, Ergebnis).
@@ -144,5 +158,32 @@ pi3(Schritte,Resultat) :-
 % Eingabe in Testeingaben).
 
 % Aufgabe 3.1
+pi_incr(N, Result):- pi_incr_h(N, 4, Result).
+
+pi_incr_h(_, ResA, ResA).
+
+pi_incr_h(N, ResA, _):- N>0,
+                        N1 is N - 1,
+                        ResC is ResA + ( (-1)**(N+1) / (2*N -1)),
+                        pi_incr_h(N1, ResA, ResC).
+
+
+
 %
-%
+
+% Aufgabe 4.1
+
+% over(N, K, Result)
+
+over(_, 0, 1).
+over(K, K, 1).
+
+over(N, K, Result):- 
+					N1 is N -1,
+                    K1 is K - 1,
+                    over(N1, K1, SumA),
+                    over(N1, K, SumB),
+                    Result is SumA + SumB.
+
+
+
